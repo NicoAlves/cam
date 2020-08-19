@@ -1,0 +1,20 @@
+// customize some Bootstrap variables
+$primary: darken(#428bca, 20%);
+$font-stack: Helvetica, sans-serif;
+$grey-color: #efefef;
+
+// the ~ allows you to reference things in node_modules
+@import "~bootstrap/scss/bootstrap";
+
+
+.container{
+  background-color: $grey-color ;
+}
+
+.yfull{
+  height: 100vh;
+}
+
+canvas{
+  display: none;
+}
