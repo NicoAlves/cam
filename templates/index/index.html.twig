@@ -1,20 +1,87 @@
-{% extends 'base.html.twig' %}
+{% block title %}{% endblock %}
 
-{% block title %}Hello IndexController!{% endblock %}
+{% block stylesheets %}
+    {{ encore_entry_link_tags('app') }}
+{% endblock %}
+
+     {% block javascripts %}
+         {{ encore_entry_script_tags('app') }}
+         {{ encore_entry_script_tags('camera') }}
+     {% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/xampp2/htdocs/cam/cam2/src/Controller/IndexController.php'|file_link(0) }}">src/Controller/IndexController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/xampp2/htdocs/cam/cam2/templates/index/index.html.twig'|file_link(0) }}">templates/index/index.html.twig</a></code></li>
-    </ul>
-</div>
+    <div class="container yfull ">
+        <div class="d-flex justify-content-center"><h1>Cam</h1></div>
+        <hr class="col-lg-4">
+
+        <div>
+            <div class="d-flex flex-row justify-content-lg-around justify-content-center flex-wrap">
+                <div class="my-2">
+                    <video id="video" class=" shadow border-0"></video>
+                </div>
+
+
+                <div class="my-2">
+                    <canvas id="canvas" class="border"></canvas>
+                </div>
+
+                <img src="https://cdn.pixabay.com/photo/2015/12/01/20/28/road-1072823_960_720.jpg" id="photo" alt="photo" height="239" width="320"
+                     class="my-2 shadow">
+
+
+            </div>
+
+
+            <form class="container-fluid my-5 bg-white-grey rounded p-5 text-center" id="formOptions">
+                <h1>Options de capture</h1>
+                <hr>
+                <div class="d-flex flex-row text-justify">
+                    <label for="interval"></label>
+                    <input id="interval" class="form-control" type="number" placeholder="Interval de capture">
+                    <label for="duree"></label>
+                    <input id="duree" class="form-control" type="number" placeholder="Durée">
+
+                </div>
+                <div class="text-left">
+                    <label for="heure" class="badge badge-secondary rounded-0 bg-grey-2 p-2">Heure de début de
+                        capture:</label>
+                    <input id="heure" class="form-control" type="time" placeholder="Heure de début">
+                </div>
+                <div class="text-left">
+                    <label for="chemin" class="badge badge-secondary rounded-0 bg-grey-2 p-2">Chemin
+                        d'enregistrement:</label>
+                    <input id="chemin" value="C:\Users\nico5\Desktop\" class="form-control" type="text"
+                           placeholder="Chemin d'enregistrement">
+{#                    <button class="btn  bg-grey-2 rounded-0 btn-primary " id="btn-file">Parcourir</button>#}
+{#                    <input id="fileselector" type="file" webkitdirectory directory multiple="false" style="display:none" />#}
+                    <div class="text-center">
+                        <button class="btn bg-grey-2 btn-primary text-uppercase rounded-0 " id="btn-option">
+                            Initialisation
+                        </button>
+                    </div>
+                </div>
+
+
+            </form>
+
+            <div class="alert alert-primary alert-dismissible fade show border-0 rounded-0 shadow" style="display: none;" role="alert" id="alert">
+                <p id="alert-content">Capture en cours ...</p>
+
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <h3 class="text-center">Les Images Uploadées:</h3>
+            <hr class="my-3">
+            <div id="lesImages" class="d-flex flex-row flex-wrap justify-content-center text-center^py-5">
+
+            </div>
+        </div>
+
+
+    </div>
+
 {% endblock %}

@@ -1,8 +1,10 @@
 import $ from "jquery";
 
 const cron = require('node-cron');
-let height = 0;
+
+let height = 239;
 let width = 320;
+let fichiers = [];
 
 $(document).ready(function () {
     initialisation();
@@ -10,14 +12,42 @@ $(document).ready(function () {
         form();
         e.preventDefault();
     });
+    // let selecteur = $('#fileselector');
+    //
+    // $('#btn-file').click(function () {
+    //     selecteur.trigger('click');
+    // });
+    //
+    // selecteur.change(function (e) {
+    //     let directory = $(this).val();
+    //     let lastindexof = directory.lastIndexOf("\\");
+    //     directory = directory.slice(0, lastindexof +1);
+    //     console.log(directory);
+    //     $('#chemin').val(directory);
+    // });
+
+
+    $('#interval').keydown(function (e) {
+        if (/^([A-z]|[@&"()!_$*€£`+=\/;?#.])$/.test(e.key)) {
+            e.preventDefault();
+        } else {
+
+        }
+    });
+
+    $('#duree').keydown(function (e) {
+        if (/^([A-z]|[@&"()!_$*€£`+=\/;?#.])$/.test(e.key)) {
+            e.preventDefault();
+        } else {
+
+        }
+    });
 
 });
 
 let initialisation = function () {
     let streaming = false,
         video = $('#video').get(0),
-        cover = $('#cover'),
-        screenshot = $('#screenshot'),
         canvas = $('#canvas').get(0);
 
     navigator.getMedia = (navigator.getUserMedia ||
@@ -65,33 +95,46 @@ let form = function () {
         duree = $('#duree'),
         heureDebut = $('#heure'),
         chemin = $('#chemin');
-    if (interval.val().length <= 0){
+    if (interval.val().length <= 0) {
         return;
     }
-    if (duree.val().length <= 0){
+    if (duree.val().length <= 0) {
         return;
     }
-    if (heureDebut.val().length <= 0){
+    if (heureDebut.val().length <= 0) {
         return;
     }
-    if (chemin.val().length <= 0){
+    if (chemin.val().length <= 0) {
         return;
     }
 
     formSubmited();
 
     function formSubmited() {
+
+
         let heureDebutVal = heureDebut.val().split(':');
         let heure = heureDebutVal[0];
         let minutes = heureDebutVal[1];
 
         //  console.log(heureDebutVal, "-", heure, "-", minutes)
         cron.schedule(`${minutes} ${heure} * * *`, () => {
+            $('#alert-content').empty().append("Capture en cours ...");
+            $('#alert').slideDown('slow');
             console.log('Tâche en cours');
-
+            let intervalFunction = setInterval(function () {
+                screen(chemin.val())
+            }, interval.val() * 1000);
 
             setTimeout(function () {
                 clearInterval(intervalFunction);
+                $('#alert').slideUp('slow').addClass("alert-success").removeClass('alert-primary');
+                $('#alert-content').empty().append("Succès: Capture terminée");
+                $('#alert').slideDown('slow');
+                setTimeout(function () {
+                    $('#alert').slideUp('slow').removeClass("alert-success").addClass('alert-primary');
+                    $('#alert-content').empty();
+                }, 3500)
             }, duree.val() * 1000);
         });
 
@@ -100,7 +143,8 @@ let form = function () {
 
     function screen(chemin) {
         let canvas = $('#canvas').get(0),
-            photo = $('#photo').get(0);
+            photo = $('#photo').get(0),
+            video = $('#video').get(0);
 
         canvas.width = width;
         canvas.height = height;
@@ -130,11 +174,18 @@ let form = function () {
                 console.log("fail");
             },
             success: function (data) {
-                console.log(data)
+                console.log(data);
+                fichiers.push(data);
+                afficherImageUpload(data)
             }
         });
 
 
+    }
+
+    function afficherImageUpload(image) {
+        let card = $('<div>', {class: 'card mx-2 p-2', text: `${image[1]}${image[0]}`});
+        $('#lesImages').append(card)
     }
 };
 
